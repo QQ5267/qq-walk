@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+<title>QQ力量跟练｜哑铃+弹力带</title>
+<style>
+:root{
+  --bg:#f7f8fb; --card:#fff; --text:#172033; --muted:#667085;
+  --accent:#5967d8; --accent2:#8b5cf6; --line:#e7e9ef;
+  --good:#15803d; --warn:#b45309; --bad:#b42318; --soft:#f4f6ff;
+}
+*{box-sizing:border-box}
+body{
+  margin:0; background:var(--bg); color:var(--text);
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",Arial,sans-serif;
+}
+.wrap{max-width:820px;margin:0 auto;padding:16px 14px 40px}
+h1{font-size:27px;margin:4px 0 5px}
+.sub{font-size:14px;color:var(--muted);margin-bottom:14px}
+.card{background:var(--card);border-radius:20px;padding:16px;margin-bottom:14px;box-shadow:0 7px 24px rgba(20,30,55,.07)}
+.settings{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+label{font-size:12px;color:var(--muted);display:block;margin-bottom:5px}
+select{width:100%;font-size:16px;padding:11px 9px;border:1px solid var(--line);border-radius:12px;background:#fff}
+.hero{text-align:center}
+.phase{font-size:17px;color:var(--accent);font-weight:800}
+.exercise{font-size:31px;font-weight:850;margin:8px 0 4px}
+.target{font-size:15px;color:var(--muted);min-height:22px}
+.timer{font-size:74px;line-height:1;font-weight:900;margin:14px 0 7px}
+.round{font-size:14px;color:var(--muted)}
+.bar{height:10px;background:#eef0f5;border-radius:999px;overflow:hidden;margin-top:13px}
+.bar>div{height:100%;width:0;background:linear-gradient(90deg,var(--accent),var(--accent2));transition:width .25s linear}
+.visual-wrap{margin-top:16px;border-top:1px solid var(--line);padding-top:15px}
+.visual-title{font-size:14px;font-weight:800;margin-bottom:8px;text-align:left}
+.demo{
+  width:100%; min-height:235px; border-radius:16px; background:#fbfbfd;
+  border:1px solid var(--line); display:flex; align-items:center; justify-content:center;
+  overflow:hidden;
+}
+.demo svg{width:100%;height:auto;display:block;max-height:255px}
+.notes{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px;text-align:left}
+.note{border-radius:14px;padding:12px 13px;font-size:14px;line-height:1.55}
+.note.good{background:#f0fdf4}.note.bad{background:#fff5f5}
+.note b{display:block;margin-bottom:5px}
+.note.good b{color:var(--good)} .note.bad b{color:var(--bad)}
+.note ul{margin:0;padding-left:18px}
+.next-card{display:none;margin-top:14px;padding:14px;border-radius:16px;background:#fff8eb;text-align:left}
+.next-card .kicker{font-size:13px;color:var(--warn);font-weight:800}
+.next-card .next-name{font-size:23px;font-weight:850;margin:5px 0}
+.next-card .next-cue{font-size:14px;color:var(--muted);line-height:1.55}
+.buttons{display:grid;grid-template-columns:1.4fr 1fr 1fr;gap:9px;margin-top:15px}
+button{border:0;border-radius:14px;padding:13px 11px;font-size:16px;font-weight:750;cursor:pointer;min-height:46px}
+.primary{background:var(--accent);color:#fff}.secondary{background:#eef0f5;color:var(--text)}.danger{background:#fff1f2;color:#b42318}
+.tip{background:var(--soft);border-left:5px solid var(--accent);padding:13px 15px;border-radius:14px;font-size:14px;line-height:1.55;margin-bottom:14px}
+.list .row{display:flex;gap:11px;padding:11px 0;border-bottom:1px solid var(--line)}
+.list .row:last-child{border-bottom:0}
+.num{flex:0 0 29px;height:29px;border-radius:50%;display:grid;place-items:center;background:#eef0ff;color:var(--accent);font-weight:800}
+.row b{display:block;margin-bottom:3px}.row span{font-size:13px;color:var(--muted)}
+.tiny{font-size:12px;color:var(--muted);line-height:1.5;padding:0 2px}
+@media(max-width:560px){
+  .exercise{font-size:27px}.timer{font-size:66px}
+  .notes{grid-template-columns:1fr}
+  .buttons{grid-template-columns:1fr 1fr}
+  .buttons .primary{grid-column:1/-1}
+  .demo{min-height:210px}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>QQ 力量跟练</h1>
+  <div class="sub">哑铃 + 弹力带｜膝盖友好｜5个动作循环｜每周 2–3 次</div>
+
+  <div class="card settings">
+    <div>
+      <label for="rounds">轮数</label>
+      <select id="rounds">
+        <option value="1">1轮</option>
+        <option value="2" selected>2轮</option>
+        <option value="3">3轮</option>
+      </select>
+    </div>
+    <div>
+      <label for="work">动作时间</label>
+      <select id="work">
+        <option value="30">30秒</option>
+        <option value="40" selected>40秒</option>
+        <option value="45">45秒</option>
+        <option value="60">60秒</option>
+      </select>
+    </div>
+    <div>
+      <label for="rest">休息时间</label>
+      <select id="rest">
+        <option value="15">15秒</option>
+        <option value="20" selected>20秒</option>
+        <option value="30">30秒</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="card hero">
+    <div class="phase" id="phase" aria-live="polite">准备</div>
+    <div class="exercise" id="exercise">哑铃硬拉</div>
+    <div class="target" id="target"></div>
+    <div class="timer" id="timer">40</div>
+    <div class="round" id="roundText"></div>
+    <div class="bar"><div id="progress"></div></div>
+
+    <div class="visual-wrap">
+      <div class="visual-title" id="visualTitle">动作示范：起始 → 完成</div>
+      <div class="demo" id="demo" aria-label="动作示范图"></div>
+
+      <div class="next-card" id="nextCard">
+        <div class="kicker">休息 · 下一个动作</div>
+        <div class="next-name" id="nextName"></div>
+        <div class="next-cue" id="nextCue"></div>
+      </div>
+
+      <div class="notes" id="notes">
+        <div class="note good">
+          <b>✓ 正确动作提示</b>
+          <ul id="goodList"></ul>
+        </div>
+        <div class="note bad">
+          <b>⚠ 常见错误</b>
+          <ul id="badList"></ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="buttons">
+      <button type="button" class="primary" id="startBtn">开始训练</button>
+      <button type="button" class="secondary" id="skipBtn">跳过</button>
+      <button type="button" class="danger" id="resetBtn">重置</button>
+    </div>
+  </div>
+
+  <div class="tip" id="tip">
+    第一次做不用追求速度。慢一点、动作标准，比多做几次更重要。
+  </div>
+
+  <div class="card list">
+    <div class="row"><div class="num">1</div><div><b>哑铃硬拉</b><span>臀部、大腿后侧；对膝盖相对友好。</span></div></div>
+    <div class="row"><div class="num">2</div><div><b>单臂哑铃划船</b><span>背部、后肩、手臂；左右侧分别训练。</span></div></div>
+    <div class="row"><div class="num">3</div><div><b>坐姿哑铃肩推</b><span>肩膀、手臂；坐着做更稳定。</span></div></div>
+    <div class="row"><div class="num">4</div><div><b>哑铃地板卧推</b><span>胸部、肩部、三头肌；瑜伽垫上完成。</span></div></div>
+    <div class="row"><div class="num">5</div><div><b>弹力带站姿侧抬腿</b><span>臀中肌、髋稳定；可扶椅背保持平衡。</span></div></div>
+  </div>
+
+  <div class="tiny">如果动作引起明显膝痛、刺痛、关节卡住或不稳，请停止该动作。肌肉发酸、发热与关节疼痛是不同感觉。</div>
+</div>
+
+<script>
+const SVG = {
+hinge: `
+<svg viewBox="0 0 720 260" role="img" aria-label="哑铃硬拉起始和髋铰链动作示范">
+  <defs><style>
+    .body{stroke:#2f3b52;stroke-width:9;stroke-linecap:round;fill:none}
+    .joint{fill:#2f3b52}.db{fill:#666f85}.guide{stroke:#c2c7d4;stroke-width:3;stroke-dasharray:7 7}
+    .arrow{stroke:#7b8499;stroke-width:5;fill:none;marker-end:url(#a)}
+    .label{font:700 18px sans-serif;fill:#3c465c}.small{font:14px sans-serif;fill:#6b7280}
+  </style><marker id="a" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L0,6 L9,3 z" fill="#7b8499"/></marker></defs>
+  <text x="145" y="28" class="label">起始</text><text x="485" y="28" class="label">髋部后推</text>
+  <line x1="205" y1="52" x2="205" y2="223" class="guide"/>
+  <circle cx="190" cy="66" r="18" class="joint"/><path d="M190 86 L190 143 M190 104 L158 145 M190 104 L222 145 M190 143 L171 210 M190 143 L210 210" class="body"/>
+  <rect x="146" y="140" width="25" height="10" rx="4" class="db"/><rect x="209" y="140" width="25" height="10" rx="4" class="db"/>
+  <line x1="171" y1="210" x2="154" y2="222" class="body"/><line x1="210" y1="210" x2="226" y2="222" class="body"/>
+  <circle cx="510" cy="75" r="18" class="joint"/><path d="M500 93 L442 138 L430 176 M472 115 L430 170 M478 112 L456 169 M442 138 L422 204 M442 138 L474 203" class="body"/>
+  <rect x="414" y="166" width="25" height="10" rx="4" class="db"/><rect x="446" y="164" width="25" height="10" rx="4" class="db"/>
+  <line x1="422" y1="204" x2="405" y2="217" class="body"/><line x1="474" y1="203" x2="492" y2="216" class="body"/>
+  <path d="M555 115 C590 105,605 110,620 120" class="arrow"/><text x="555" y="150" class="small">臀部向后</text>
+  <text x="256" y="240" class="small">背部保持平直，不是下蹲</text>
+</svg>`,
+row: `
+<svg viewBox="0 0 720 260" role="img" aria-label="单臂哑铃划船动作示范">
+  <defs><style>.body{stroke:#2f3b52;stroke-width:9;stroke-linecap:round;fill:none}.joint{fill:#2f3b52}.db{fill:#666f85}.bench{fill:#d9dde7}.arrow{stroke:#7b8499;stroke-width:5;fill:none;marker-end:url(#b)}.label{font:700 18px sans-serif;fill:#3c465c}.small{font:14px sans-serif;fill:#6b7280}</style><marker id="b" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L0,6 L9,3 z" fill="#7b8499"/></marker></defs>
+  <text x="120" y="28" class="label">手臂下垂</text><text x="475" y="28" class="label">拉向腰部</text>
+  <rect x="78" y="154" width="125" height="18" rx="5" class="bench"/>
+  <circle cx="212" cy="72" r="17" class="joint"/><path d="M204 89 L163 125 L141 157 M165 125 L183 171 M165 125 L150 205 M165 125 L208 198" class="body"/>
+  <rect x="174" y="171" width="24" height="11" rx="4" class="db"/><line x1="150" y1="205" x2="133" y2="218" class="body"/><line x1="208" y1="198" x2="226" y2="213" class="body"/>
+  <rect x="430" y="154" width="125" height="18" rx="5" class="bench"/>
+  <circle cx="566" cy="72" r="17" class="joint"/><path d="M558 89 L515 125 L493 157 M517 125 L540 138 M517 125 L502 205 M517 125 L560 198" class="body"/>
+  <rect x="532" y="132" width="24" height="11" rx="4" class="db"/><line x1="502" y1="205" x2="485" y2="218" class="body"/><line x1="560" y1="198" x2="578" y2="213" class="body"/>
+  <path d="M544 165 C570 155,574 140,557 131" class="arrow"/>
+  <text x="270" y="238" class="small">肘部贴近身体，肩膀不要耸起</text>
+</svg>`,
+press: `
+<svg viewBox="0 0 720 260" role="img" aria-label="坐姿哑铃肩推动作示范">
+  <defs><style>.body{stroke:#2f3b52;stroke-width:9;stroke-linecap:round;fill:none}.joint{fill:#2f3b52}.db{fill:#666f85}.chair{stroke:#c5cad6;stroke-width:9;fill:none}.arrow{stroke:#7b8499;stroke-width:5;fill:none;marker-end:url(#c)}.label{font:700 18px sans-serif;fill:#3c465c}.small{font:14px sans-serif;fill:#6b7280}</style><marker id="c" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L0,6 L9,3 z" fill="#7b8499"/></marker></defs>
+  <text x="124" y="28" class="label">哑铃在肩侧</text><text x="480" y="28" class="label">向上推</text>
+  <path d="M112 156 L213 156 L213 217 M118 156 L118 217" class="chair"/>
+  <circle cx="167" cy="73" r="18" class="joint"/><path d="M167 93 L167 151 M167 108 L135 116 L126 87 M167 108 L199 116 L208 87 M167 151 L147 201 M167 151 L188 201" class="body"/>
+  <rect x="113" y="78" width="25" height="11" rx="4" class="db"/><rect x="196" y="78" width="25" height="11" rx="4" class="db"/>
+  <path d="M462 156 L563 156 L563 217 M468 156 L468 217" class="chair"/>
+  <circle cx="517" cy="73" r="18" class="joint"/><path d="M517 93 L517 151 M517 108 L496 61 L491 38 M517 108 L538 61 L543 38 M517 151 L497 201 M517 151 L538 201" class="body"/>
+  <rect x="478" y="29" width="25" height="11" rx="4" class="db"/><rect x="531" y="29" width="25" height="11" rx="4" class="db"/>
+  <path d="M246 115 C278 92,299 73,313 50" class="arrow"/><text x="274" y="126" class="small">向上，不要后仰</text>
+</svg>`,
+floorpress: `
+<svg viewBox="0 0 720 260" role="img" aria-label="哑铃地板卧推动作示范">
+  <defs><style>.body{stroke:#2f3b52;stroke-width:9;stroke-linecap:round;fill:none}.joint{fill:#2f3b52}.db{fill:#666f85}.mat{fill:#e5e8ef}.arrow{stroke:#7b8499;stroke-width:5;fill:none;marker-end:url(#d)}.label{font:700 18px sans-serif;fill:#3c465c}.small{font:14px sans-serif;fill:#6b7280}</style><marker id="d" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L0,6 L9,3 z" fill="#7b8499"/></marker></defs>
+  <text x="118" y="28" class="label">手肘轻触地面</text><text x="488" y="28" class="label">向上推直</text>
+  <rect x="65" y="202" width="240" height="13" rx="6" class="mat"/><circle cx="102" cy="175" r="17" class="joint"/><path d="M120 176 L206 176 M198 176 L238 196 M155 176 L155 124 L133 109 M189 176 L189 124 L211 109" class="body"/>
+  <rect x="120" y="100" width="25" height="11" rx="4" class="db"/><rect x="199" y="100" width="25" height="11" rx="4" class="db"/>
+  <rect x="420" y="202" width="240" height="13" rx="6" class="mat"/><circle cx="457" cy="175" r="17" class="joint"/><path d="M475 176 L561 176 M553 176 L593 196 M510 176 L510 95 M544 176 L544 95" class="body"/>
+  <rect x="497" y="84" width="25" height="11" rx="4" class="db"/><rect x="532" y="84" width="25" height="11" rx="4" class="db"/>
+  <path d="M355 146 C384 120,394 105,398 80" class="arrow"/><text x="272" y="235" class="small">手腕保持中立，手肘不要完全向外张开</text>
+</svg>`,
+lateral: `
+<svg viewBox="0 0 720 260" role="img" aria-label="弹力带站姿侧抬腿动作示范">
+  <defs><style>.body{stroke:#2f3b52;stroke-width:9;stroke-linecap:round;fill:none}.joint{fill:#2f3b52}.band{stroke:#777f91;stroke-width:6;fill:none}.chair{stroke:#c5cad6;stroke-width:8;fill:none}.arrow{stroke:#7b8499;stroke-width:5;fill:none;marker-end:url(#e)}.label{font:700 18px sans-serif;fill:#3c465c}.small{font:14px sans-serif;fill:#6b7280}</style><marker id="e" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L0,6 L9,3 z" fill="#7b8499"/></marker></defs>
+  <text x="132" y="28" class="label">站稳</text><text x="482" y="28" class="label">腿向侧面抬</text>
+  <path d="M80 114 L123 114 L123 207 M80 114 L80 207" class="chair"/>
+  <circle cx="191" cy="67" r="18" class="joint"/><path d="M191 87 L191 148 M191 105 L150 117 M191 105 L223 124 M191 148 L176 207 M191 148 L211 207" class="body"/><path d="M173 184 Q194 193 214 184" class="band"/>
+  <path d="M430 114 L473 114 L473 207 M430 114 L430 207" class="chair"/>
+  <circle cx="541" cy="67" r="18" class="joint"/><path d="M541 87 L541 148 M541 105 L500 117 M541 105 L573 124 M541 148 L526 207 M541 148 L603 181" class="body"/><path d="M524 184 Q563 190 606 178" class="band"/>
+  <path d="M574 154 C598 142,620 140,640 145" class="arrow"/><text x="271" y="238" class="small">身体不要跟着侧倒；幅度小也有效</text>
+</svg>`
+};
+
+const exercises = [
+  {
+    name:"哑铃硬拉",
+    target:"臀部和大腿后侧发力",
+    cue:"臀部向后推，像用屁股去碰身后的墙。背部保持自然平直。",
+    good:["双脚约与髋同宽","膝盖只微微弯曲","哑铃贴近腿下降","站起时夹紧臀部"],
+    bad:["把动作做成深蹲","弓背或抬头过高","哑铃离身体太远"],
+    svg:SVG.hinge
+  },
+  {
+    name:"单臂哑铃划船",
+    target:"背部、后肩和手臂",
+    cue:"一只手扶稳桌子或椅背，另一只手把哑铃拉向腰部。",
+    good:["背部保持平直","肘部沿身体向后走","顶部轻轻夹肩胛","左右各做一半时间"],
+    bad:["耸肩拉哑铃","身体跟着扭转","用惯性甩动"],
+    svg:SVG.row
+  },
+  {
+    name:"坐姿哑铃肩推",
+    target:"肩膀和手臂",
+    cue:"坐稳后，从肩部位置缓慢向上推。核心收紧，不要后仰。",
+    good:["双脚稳稳踩地","手腕与前臂基本垂直","顶部不用猛烈锁死肘关节","慢慢放回肩部"],
+    bad:["腰部明显后仰","耸肩","哑铃快速砸下来"],
+    svg:SVG.press
+  },
+  {
+    name:"哑铃地板卧推",
+    target:"胸部、肩部和三头肌",
+    cue:"躺在瑜伽垫上，手肘轻触地面后，再把哑铃推起。",
+    good:["肩胛自然贴地","手腕保持直","手肘与身体约30–45°","推起和放下都要控制"],
+    bad:["手肘完全横向打开","手腕向后折","两只哑铃互相撞击"],
+    svg:SVG.floorpress
+  },
+  {
+    name:"弹力带站姿侧抬腿",
+    target:"臀中肌和髋部稳定",
+    cue:"扶住椅背，身体保持直立，腿缓慢向侧面抬起再回来。",
+    good:["支撑腿膝盖放松但不塌","脚尖尽量朝前","抬腿幅度不用大","左右各做一半时间"],
+    bad:["身体向反方向歪","用惯性甩腿","脚尖明显向外转"],
+    svg:SVG.lateral
+  }
+];
+
+let timerId=null, running=false, phase="work", exIndex=0, round=1, remaining=40, phaseTotal=40;
+const $=id=>document.getElementById(id);
+
+function cfg(){ return {rounds:+$("rounds").value,work:+$("work").value,rest:+$("rest").value}; }
+
+function speak(text){
+  if(!("speechSynthesis" in window)) return;
+  speechSynthesis.cancel();
+  const u=new SpeechSynthesisUtterance(text); u.lang="zh-CN"; u.rate=0.98;
+  speechSynthesis.speak(u);
+}
+function beep(freq=700,duration=110){
+  try{
+    const ctx=new (window.AudioContext||window.webkitAudioContext)();
+    const osc=ctx.createOscillator(), gain=ctx.createGain();
+    osc.connect(gain); gain.connect(ctx.destination); osc.frequency.value=freq; gain.gain.value=.07;
+    osc.start(); setTimeout(()=>{osc.stop();ctx.close()},duration);
+  }catch(e){}
+}
+function li(items){ return items.map(x=>`<li>${x}</li>`).join(""); }
+function nextExercise(){
+  if(exIndex<exercises.length-1) return exercises[exIndex+1];
+  return exercises[0];
+}
+function nextPositionText(){
+  if(exIndex<exercises.length-1) return `动作 ${exIndex+2} / ${exercises.length}`;
+  return `下一轮动作 1 / ${exercises.length}`;
+}
+
+function updateUI(){
+  const c=cfg(), ex=exercises[exIndex];
+  $("exercise").textContent=phase==="done"?"完成 🎉":ex.name;
+  $("target").textContent=phase==="done"?"今天的力量训练已经完成。":ex.target;
+  $("phase").textContent=phase==="work"?"训练":phase==="rest"?"休息":phase==="done"?"完成":"准备";
+  $("timer").textContent=phase==="done"?"✓":remaining;
+  $("roundText").textContent=phase==="done"?`共完成 ${c.rounds} 轮`:`第 ${round} / ${c.rounds} 轮 · 动作 ${exIndex+1} / ${exercises.length}`;
+  const pct=phase==="done"?100:(phaseTotal?((phaseTotal-remaining)/phaseTotal*100):0);
+  $("progress").style.width=Math.max(0,Math.min(100,pct))+"%";
+
+  if(phase==="rest"){
+    const nx=nextExercise();
+    $("visualTitle").textContent="休息一下，看看下一个动作";
+    $("demo").innerHTML=nx.svg;
+    $("nextCard").style.display="block";
+    $("nextName").textContent=nx.name+" · "+nextPositionText();
+    $("nextCue").textContent=nx.cue;
+    $("notes").style.display="none";
+    $("tip").textContent="休息时调整呼吸、准备器材。倒计时结束会自动进入下一个动作。";
+  }else if(phase==="done"){
+    $("visualTitle").textContent="训练完成";
+    $("demo").innerHTML=`<div style="padding:45px 20px;text-align:center"><div style="font-size:58px">🎉</div><div style="font-size:22px;font-weight:800;margin-top:8px">今天做完就够了</div><div style="color:#667085;margin-top:7px">规律坚持，比一次练很多更重要。</div></div>`;
+    $("nextCard").style.display="none"; $("notes").style.display="none";
+    $("tip").textContent="如果明天只是轻微肌肉酸痛很正常；不需要连续两天训练同一套力量动作。";
+  }else{
+    $("visualTitle").textContent="动作示范：起始 → 完成";
+    $("demo").innerHTML=ex.svg;
+    $("nextCard").style.display="none";
+    $("notes").style.display="grid";
+    $("goodList").innerHTML=li(ex.good);
+    $("badList").innerHTML=li(ex.bad);
+    $("tip").textContent=ex.cue;
+  }
+  $("startBtn").textContent=running?"暂停":(phase==="done"?"重新开始":"开始训练");
+}
+
+function setPhase(p,secs){phase=p;remaining=secs;phaseTotal=secs;updateUI();}
+
+function nextStep(){
+  const c=cfg();
+  if(phase==="work"){
+    if(exIndex===exercises.length-1 && round===c.rounds){
+      phase="done"; running=false; clearInterval(timerId); timerId=null;
+      beep(940,220); speak("训练完成，做得很好"); updateUI(); return;
+    }
+    setPhase("rest",c.rest);
+    const nx=nextExercise();
+    beep(520,120);
+    speak("休息。下一个动作，"+nx.name+"。"+nx.cue);
+    return;
+  }
+  if(phase==="rest"){
+    exIndex++;
+    if(exIndex>=exercises.length){exIndex=0;round++;}
+    setPhase("work",c.work);
+    beep(820,150);
+    speak("开始。"+exercises[exIndex].name);
+  }
+}
+
+function tick(){
+  if(!running||phase==="done") return;
+  remaining--;
+  if(remaining<=3 && remaining>0) beep(760,80);
+  if(remaining<=0) nextStep(); else updateUI();
+}
+
+function startPause(){
+  if(phase==="done") resetAll();
+  if(!running){
+    if(!timerId) timerId=setInterval(tick,1000);
+    running=true;
+    if(phase==="work") speak("开始。"+exercises[exIndex].name+"。"+exercises[exIndex].cue);
+  }else running=false;
+  updateUI();
+}
+function resetAll(){
+  if(timerId) clearInterval(timerId);
+  timerId=null;running=false;phase="work";exIndex=0;round=1;
+  remaining=cfg().work;phaseTotal=remaining;updateUI();
+}
+function skip(){if(phase!=="done") nextStep();}
+
+$("startBtn").addEventListener("click",startPause);
+$("skipBtn").addEventListener("click",skip);
+$("resetBtn").addEventListener("click",resetAll);
+["rounds","work","rest"].forEach(id=>$(id).addEventListener("change",resetAll));
+resetAll();
+</script>
+</body>
+</html>
